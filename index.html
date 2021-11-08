@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Dilevery App</title>
+    <style>
+        * {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        .navbar {
+            display: flex;
+        }
+        
+        #nav-con {
+            display: flex;
+            width: 100%;
+            height: 46px;
+            border: 1px solid red;
+            align-items: center;
+        }
+        
+        #right {
+            display: flex;
+            width: 80%;
+            justify-content: right;
+        }
+        
+        #right div {
+            margin: 0px 10px 0px 10px;
+            height: 100%;
+        }
+        
+        .nav-font {
+            color: black;
+            font-size: 24px;
+            line-height: 24px;
+            font-weight: bold;
+            margin: 5px 10px;
+            cursor: pointer;
+        }
+        
+        .nav-font:hover {
+            color: red;
+        }
+        
+        #logo>p {
+            font-size: 38px;
+            color: black;
+            font-weight: bold;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+        
+        #menu {
+            margin-right: 10%;
+            background-color: #558B2F;
+        }
+        
+        #container {
+            margin-top: 3rem;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 20%);
+            gap: 5%;
+            grid-auto-rows: 300px;
+        }
+        
+        #container div>img {
+            width: 200px;
+            height: 150px;
+            border-radius: 10px;
+            margin: 0% 10%;
+        }
+        
+        #container div {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div id="nav-con">
+            <div id="logo">
+                <p onclick="document.location='index.html'">Food Adda</p>
+            </div>
+            <div id="right">
+                <div onclick="document.location='menu.html'" id="menu">
+                    <p class="nav-font">Menu</p>
+                </div>
+                <div>
+                    <p onclick="document.location='login.html'" class="nav-font">Login</p>
+                </div>
+                <div>
+                    <p onclick="document.location='signup.html'" class="nav-font">Signup</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div id="container">
+    </div>
+</body>
+<script>
+    var container = document.getElementById("container");
+    async function menubar() {
+        for (var i = 0; i < 23; i++) {
+
+            let res = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+            let data = await res.json();
+            appendData(data.meals);
+            console.log(data.meals);
+        }
+    }
+    menubar();
+
+
+    function appendData(data) {
+        data.forEach((item) => {
+            let div = document.createElement('div');
+
+            let img = document.createElement("img");
+            img.src = item.strMealThumb;
+
+            let name = document.createElement("h2");
+            name.textContent = item.strMeal;
+
+
+            div.append(img, name);
+            container.appendChild(div);
+        });
+
+    }
+</script>
+
+
+</html>

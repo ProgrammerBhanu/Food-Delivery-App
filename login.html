@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login-page</title>
+    <style>
+        * {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        .navbar {
+            display: flex;
+        }
+        
+        #nav-con {
+            display: flex;
+            width: 100%;
+            height: 46px;
+            border: 1px solid red;
+            align-items: center;
+        }
+        
+        #right {
+            display: flex;
+            width: 80%;
+            justify-content: right;
+        }
+        
+        #right div {
+            margin: 0px 10px 0px 10px;
+            height: 100%;
+        }
+        
+        .nav-font {
+            color: black;
+            font-size: 24px;
+            line-height: 24px;
+            font-weight: bold;
+            margin: 5px 10px;
+            cursor: pointer;
+        }
+        
+        .nav-font:hover {
+            color: red;
+        }
+        
+        #logo>p {
+            font-size: 38px;
+            color: black;
+            font-weight: bold;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+        
+        #menu {
+            margin-right: 10%;
+            background-color: #558B2F;
+        }
+        
+        #signup-form {
+            width: 30%;
+            margin: 8%;
+            text-align: center;
+        }
+        
+        #signup-form input {
+            margin: 10px;
+            width: 100%;
+            padding: 10px 0px;
+        }
+        
+        #form {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar"></nav>
+    <div id="form">
+        <form onsubmit="login(event)" action="" id="signup-form">
+            <h1>login form</h1>
+            <input type="text" name="uname" id="uname" placeholder="Moto@1234" />
+            <input type="password" name="pass" id="password" placeholder="password" />
+            <input type="submit" value="Login Now">
+        </form>
+    </div>
+</body>
+<script type="module">
+    var sign_nav = document.querySelector('.navbar'); import navbar from "./component/nav.js"; sign_nav.innerHTML = navbar();
+
+</script>
+<script>
+    function login(p) {
+        p.preventDefault();
+
+        let form_data = document.getElementById("signup-form");
+
+        let user_data = {
+            password: form_data.password.value,
+            username: form_data.uname.value,
+
+        }
+        user_data = JSON.stringify(user_data);
+        fetch("https://masai-api-mocker.herokuapp.com/auth/login", {
+                method: 'POST',
+                body: user_data,
+                headers: {
+                    "Content-Type": "Application/json",
+                },
+            })
+            .then((res) => {
+                return res.json();
+            })
+            .then((res) => {
+                fetchData(user_data.username, res.token);
+                console.log(res.token);
+                alert(`${user_data.username} successfully logged`);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    }
+
+    function fetchData(uname, token) {
+        fetch(`https://masai-api-mocker.herokuapp.com/user/${uname}`, {
+                headers: {
+                    "Content-Type": "application/json",
+
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                return res.json()
+            })
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+</script>
+
+</html>
